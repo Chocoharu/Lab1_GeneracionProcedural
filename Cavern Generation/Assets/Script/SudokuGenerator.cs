@@ -23,6 +23,7 @@ public class SudokuGenerator : MonoBehaviour
         return FillBoard(0, 0);
     }
 
+
     // Rellena el tablero recursivamente
     private bool FillBoard(int row, int col)
     {
@@ -92,6 +93,7 @@ public class SudokuGenerator : MonoBehaviour
             }
         }
     }
+    
     private void DrawBoard()
     {
         float cellSize = 40f; // Ajusta según tu diseño
@@ -117,6 +119,18 @@ public class SudokuGenerator : MonoBehaviour
                     text.fontSize = 28; // Ajusta el tamaño de fuente si es necesario
                 }
             }
+        }
+    }
+
+    public void Solver()
+    {
+        // Ejemplo de uso en SudokuGenerator
+        var solver = new SudokuSolver(board);
+        bool solved = solver.Solve();
+        if (solved)
+        {
+            board = solver.GetSolution();
+            DrawBoard();
         }
     }
 }
