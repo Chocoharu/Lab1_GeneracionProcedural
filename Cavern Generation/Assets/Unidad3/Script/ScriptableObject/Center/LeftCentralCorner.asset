@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab1d1ed6caaed6545a683514f7f7e2e3, type: 3}
+  m_Name: LeftCentralCorner
+  m_EditorClassIdentifier: 
+  nodeName: LeftCentralCorner
+  prefab: {fileID: 2255610502334949073, guid: 45a9ffd77d423134ca6da2302c18adbf, type: 3}
+  top:
+    compatibleNodes:
+    - {fileID: 11400000, guid: ae932d5db24e44f4883d4b7b701ac29b, type: 2}
+  bottom:
+    compatibleNodes:
+    - {fileID: 11400000, guid: 034ca5150fe11794ab056a49ee8255c4, type: 2}
+  left:
+    compatibleNodes: []
+  right:
+    compatibleNodes:
+    - {fileID: 11400000, guid: 71b0771a8bfb44043825ac96fbfbde5b, type: 2}
+    - {fileID: 11400000, guid: 93fdb8a5c2cd76d48a6e229eb59347c6, type: 2}

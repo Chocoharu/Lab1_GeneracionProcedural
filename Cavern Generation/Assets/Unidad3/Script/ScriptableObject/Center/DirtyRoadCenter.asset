@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab1d1ed6caaed6545a683514f7f7e2e3, type: 3}
+  m_Name: DirtyRoadCenter
+  m_EditorClassIdentifier: 
+  nodeName: DirtyRoadCenter
+  prefab: {fileID: 2865597880818603797, guid: 6e4bd4e01772cc3418b159d16a1ff875, type: 3}
+  top:
+    compatibleNodes:
+    - {fileID: 11400000, guid: fc1cf5abe9332e84e8b096fb12facb07, type: 2}
+  bottom:
+    compatibleNodes:
+    - {fileID: 11400000, guid: 67e7f5fc42a4f9c438a9913042ec2bb4, type: 2}
+  left:
+    compatibleNodes:
+    - {fileID: 11400000, guid: 41cde22a1fda0e24498a8502c94197e3, type: 2}
+  right:
+    compatibleNodes:
+    - {fileID: 11400000, guid: 46375bb4efedd5043b485736e5e5661e, type: 2}
