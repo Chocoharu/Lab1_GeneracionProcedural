@@ -2,34 +2,37 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// Ejemplo de uso en Unity
-/// - Define una matriz de entrada (int IDs) o constrúyela desde texturas/tiles
-/// - Aprende patrones y pesos
-/// - Corre WFC con tamaño deseado
-/// - Reconstruye la salida y opcionalmente instancia prefabs por ID
 public class WFCGenerator : MonoBehaviour
 {
+    // Tamaño de los patrones extraídos (N x N)
     [Header("Aprendizaje de patrones")]
-    [SerializeField] int n = 3;                          // tamaño de patrón n×n
-    [SerializeField] bool periodicInput = true;          // envolver al extraer
-    [SerializeField] int rngSeed = 12345;                // semilla para reproducibilidad (-1 = aleatoria)
+    [SerializeField] int n = 3;
+    // Si al extraer patrones desde la entrada se considera envoltura (torus)
+    [SerializeField] bool periodicInput = true;
+    // Semilla para el generador aleatorio (-1 significa usar una semilla aleatoria)
+    [SerializeField] int rngSeed = 12345;
 
+    // Dimensiones de la salida en celdas de patrón
     [Header("Tamaño de salida (en celdas de patrón)")]
     [SerializeField] int outWidth = 20;
     [SerializeField] int outHeight = 20;
 
+    // Mapeo opcional de ID de celda a Prefab de Unity para instanciado
     [Header("Mapeo opcional ID->Prefab (para instanciar)")]
-    [SerializeField] List<TilePrefab> tilePrefabs = new(); // lista de pares (id, prefab)
+    [SerializeField] List<TilePrefab> tilePrefabs = new();
+    // Tamaño de cada celda en unidades de escena
     [SerializeField] float cellSize = 1f;
 
+    // Fuente de ejemplo: CSV de enteros (opcional)
     [Header("Fuente simple de ejemplo (matriz de enteros)")]
-    [SerializeField] TextAsset inputCSV;                 // opcional: CSV de ints, separados por coma
+    [SerializeField] TextAsset inputCSV;
 
+    // Diccionario interno que asocia un ID de celda a un prefab
     private Dictionary<int, GameObject> _idToPrefab;
 
     void Start()
     {
-        // 1) Construye la matriz de entrada
+        // 1) Cargar la matriz de entrada desde CSV
         int[,] input = LoadInputFromCSV(inputCSV);
         if (input == null)
         {
@@ -37,11 +40,11 @@ public class WFCGenerator : MonoBehaviour
             return;
         }
 
-        // 2) Aprende patrones, pesos y reglas
+        // 2) Construir el catálogo de patrones (patrones, pesos y reglas de compatibilidad)
         var catalog = new PatternCatalog(n, periodicInput);
         catalog.BuildFromInput(input);
 
-        // 3) Ejecuta WFC en una rejilla de patrones outWidth x outHeight
+        // 3) Ejecutar el modelo Wave Function Collapse sobre una rejilla de patrones outWidth x outHeight
         int? seed = rngSeed >= 0 ? rngSeed : (int?)null;
         var model = new WaveModel(catalog, outWidth, outHeight, seed);
         if (!model.Run(out int[,] patternGrid))
@@ -50,16 +53,17 @@ public class WFCGenerator : MonoBehaviour
             return;
         }
 
-        // 4) Reconstruye salida de IDs por celda: tamaño (outWidth+n-1) x (outHeight+n-1)
+        // 4) Reconstruir la matriz de IDs por celda a partir de la rejilla de patrones
         int[,] result = catalog.ReconstructFromPatternGrid(outWidth, outHeight, patternGrid);
 
-        // 5) Instanciar prefabs (opcional)
+        // 5) Preparar el mapeo ID->Prefab e instanciar la salida en la escena (si hay prefabs)
         BuildPrefabMap();
         InstantiateResult(result);
     }
 
     // ---------- Utilidades ----------
 
+    // Construye el diccionario de mapeo ID->Prefab a partir de la lista serializada
     private void BuildPrefabMap()
     {
         _idToPrefab = new Dictionary<int, GameObject>();
@@ -70,6 +74,7 @@ public class WFCGenerator : MonoBehaviour
         }
     }
 
+    // Instancia los prefabs en la escena según la matriz de IDs; si no hay mapeo, solo informa por consola
     private void InstantiateResult(int[,] grid)
     {
         if (_idToPrefab == null || _idToPrefab.Count == 0)
@@ -96,9 +101,11 @@ public class WFCGenerator : MonoBehaviour
         }
     }
 
+    // Carga una matriz de enteros desde un TextAsset CSV; devuelve null si no se proporciona
     private int[,] LoadInputFromCSV(TextAsset csv)
     {
         if (csv == null) return null;
+
         string[] lines = csv.text.Trim().Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         if (lines.Length == 0) return null;
 
@@ -129,6 +136,8 @@ public class WFCGenerator : MonoBehaviour
 [Serializable]
 public class TilePrefab
 {
+    // Identificador que corresponde al valor en la matriz de salida
     public int id;
+    // Prefab a instanciar para el id correspondiente
     public GameObject prefab;
 }

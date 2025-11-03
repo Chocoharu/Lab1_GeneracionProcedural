@@ -1,10 +1,5 @@
 using System;
 using System.Collections.Generic;
-
-/// Implementación del Wave Function Collapse con:
-/// - Selección por mínima entropía (Shannon) usando pesos del catálogo
-/// - Muestreo ponderado (probabilidades)
-/// - Propagación de restricciones hasta converger o fallar
 public class WaveModel
 {
     private readonly PatternCatalog _catalog;
@@ -22,6 +17,7 @@ public class WaveModel
     private static readonly int[] DY = { 1, -1, 0, 0 };
     private const int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
 
+    // Constructor: inicializa estado, marca todas las opciones como permitidas y carga pesos
     public WaveModel(PatternCatalog catalog, int width, int height, int? seed = null)
     {
         _catalog = catalog;
@@ -33,13 +29,13 @@ public class WaveModel
         _weightLog = new double[catalog.PatternCount];
         _rng = seed.HasValue ? new Random(seed.Value) : new Random();
 
-        // Inicializar wave: todo permitido al inicio
+        // Inicializar todas las celdas con todos los patrones permitidos
         for (int y = 0; y < _H; y++)
             for (int x = 0; x < _W; x++)
                 for (int p = 0; p < catalog.PatternCount; p++)
                     _wave[x, y, p] = true;
 
-        // Pesos
+        // Cargar pesos normalizados desde el catálogo y calcular w*log(w)
         double[] wn = catalog.GetWeightsNormalized();
         for (int p = 0; p < wn.Length; p++)
         {
@@ -48,44 +44,44 @@ public class WaveModel
         }
     }
 
+    // Ejecuta el algoritmo WFC. Devuelve true y la grilla de patrones si tiene éxito.
     public bool Run(out int[,] patternGrid)
     {
-        // Bucle principal: seleccionar celda con mínima entropía, colapsar y propagar
         while (true)
         {
             var next = FindMinEntropyCell(out double entropy);
             if (next == null)
             {
-                // No hay celdas con superposición: todo colapsado
+                // Todas las celdas están colapsadas: devolver copia del resultado
                 patternGrid = (int[,])_chosen.Clone();
                 return true;
             }
 
             (int x, int y) = next.Value;
 
-            // Muestrear un patrón ponderado por los pesos restantes en esa celda
+            // Muestrear un patrón válido en la celda seleccionada
             int picked = SamplePattern(x, y);
             if (picked < 0)
             {
                 patternGrid = null;
-                return false; // contradicción (sin patrones posibles)
+                return false; // contradicción: sin patrones posibles
             }
 
-            // Banear todos los demás patrones en (x,y)
+            // Banear todos los patrones distintos del escogido en la celda
             for (int p = 0; p < _catalog.PatternCount; p++)
                 if (p != picked && _wave[x, y, p])
                     Ban(x, y, p);
 
             _chosen[x, y] = picked;
 
-            // Propagar restricciones
+            // Propagar restricciones a través de la cuadrícula
             if (!Propagate())
             {
                 patternGrid = null;
                 return false;
             }
 
-            // Continuar hasta colapsar todo
+            // Si toda la cuadrícula está colapsada, devolver resultado
             if (IsFullyCollapsed())
             {
                 patternGrid = (int[,])_chosen.Clone();
@@ -94,7 +90,7 @@ public class WaveModel
         }
     }
 
-    // ---------- Núcleo WFC ----------
+    // Busca la celda no colapsada con mínima entropía y devuelve entropía usada para desempate.
     private (int x, int y)? FindMinEntropyCell(out double bestEntropy)
     {
         bestEntropy = double.MaxValue;
@@ -106,7 +102,6 @@ public class WaveModel
             {
                 if (IsCollapsed(x, y)) continue;
 
-                // Calcular entropía de la celda
                 double sumW = 0, sumWLog = 0;
                 int count = 0;
                 for (int p = 0; p < _catalog.PatternCount; p++)
@@ -120,10 +115,13 @@ public class WaveModel
                     }
                 }
 
-                if (count == 0) return (x, y); // sin opciones -> entropía mínima/contradicción
+                // Si no hay opciones, retornar inmediatamente señalando contradicción
+                if (count == 0) return (x, y);
 
+                // Entropía de Shannon modificada por los pesos
                 double H = Math.Log(sumW) - (sumW > 0 ? sumWLog / sumW : 0.0);
-                // desempate aleatorio ligero
+
+                // Añadir un ruido pequeño para evitar empates deterministas
                 double noise = 1e-6 * _rng.NextDouble();
                 double key = H + noise;
 
@@ -137,9 +135,9 @@ public class WaveModel
         return best;
     }
 
+    // Muestrea un patrón entre los permitidos en la celda (x,y) de forma ponderada por _weights.
     private int SamplePattern(int x, int y)
     {
-        // Construir distribución de probabilidad restringida a patrones aún válidos
         double total = 0;
         for (int p = 0; p < _catalog.PatternCount; p++)
             if (_wave[x, y, p]) total += _weights[p];
@@ -154,22 +152,26 @@ public class WaveModel
             acc += _weights[p];
             if (r <= acc) return p;
         }
-        // Debería haber retornado, pero por redondeo:
+
+        // Fallback por redondeo: devolver el último patrón permitido
         for (int p = _catalog.PatternCount - 1; p >= 0; p--)
             if (_wave[x, y, p]) return p;
 
         return -1;
     }
 
+    // Marca el patrón p en la celda (x,y) como no permitido
     private void Ban(int x, int y, int p)
     {
         _wave[x, y, p] = false;
     }
 
+    // Propaga las restricciones hasta que no haya más cambios o se detecte contradicción.
     private bool Propagate()
     {
         var q = new Queue<(int x, int y)>();
-        // Inicial: encolar todas las celdas
+
+        // Encolar todas las celdas para garantizar que la consistencia se propague inicialmente
         for (int y = 0; y < _H; y++)
             for (int x = 0; x < _W; x++)
                 q.Enqueue((x, y));
@@ -185,15 +187,14 @@ public class WaveModel
                 if (nx < 0 || nx >= _W || ny < 0 || ny >= _H) continue;
 
                 bool changed = false;
+                int invDir = Inverse(dir);
 
-                // Para cada patrón q en el vecino, verificar si sigue teniendo soporte desde (x,y)
+                // Verificar para cada patrón del vecino si aún tiene soporte en la celda actual
                 for (int qpat = 0; qpat < _catalog.PatternCount; qpat++)
                 {
                     if (!_wave[nx, ny, qpat]) continue;
 
-                    // Debe existir al menos un patrón p en (x,y) compatible con qpat según dir inversa
                     bool supported = false;
-                    int invDir = Inverse(dir);
                     foreach (int p in _catalog.GetCompatible(qpat, invDir))
                     {
                         if (_wave[x, y, p]) { supported = true; break; }
@@ -208,12 +209,13 @@ public class WaveModel
 
                 if (changed)
                 {
-                    // Si el vecino quedó sin opciones, contradicción
+                    // Si el vecino se quedó sin opciones, se detecta contradicción
                     bool any = false;
                     for (int qp = 0; qp < _catalog.PatternCount; qp++)
                         if (_wave[nx, ny, qp]) { any = true; break; }
                     if (!any) return false;
 
+                    // Re-enqueue para propagar los efectos del cambio
                     q.Enqueue((nx, ny));
                 }
             }
@@ -221,6 +223,7 @@ public class WaveModel
         return true;
     }
 
+    // Devuelve la dirección opuesta a la dada
     private int Inverse(int dir) => dir switch
     {
         UP => DOWN,
@@ -230,6 +233,8 @@ public class WaveModel
         _ => 0
     };
 
+    // Determina si la celda (x,y) está colapsada (exactamente un patrón permitido).
+    // Si lo está, actualiza `_chosen` con el índice del patrón.
     private bool IsCollapsed(int x, int y)
     {
         int count = 0, last = -1;
@@ -241,6 +246,7 @@ public class WaveModel
         return count == 1;
     }
 
+    // Comprueba si todas las celdas están colapsadas
     private bool IsFullyCollapsed()
     {
         for (int y = 0; y < _H; y++)
