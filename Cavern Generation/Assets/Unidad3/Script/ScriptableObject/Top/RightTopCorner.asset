@@ -15,11 +15,19 @@ MonoBehaviour:
   nodeName: RightTopCorner
   prefab: {fileID: 8559786746612392079, guid: 0f6c36fc7ae0865488b5bf9feb3afe6d, type: 3}
   top:
-    compatibleNodes: []
+    compatibleNodes:
+    - {fileID: 11400000, guid: caaf61493ef163d4690529f473e39b92, type: 2}
+    - {fileID: 11400000, guid: 034ca5150fe11794ab056a49ee8255c4, type: 2}
   bottom:
-    compatibleNodes: []
+    compatibleNodes:
+    - {fileID: 11400000, guid: 46375bb4efedd5043b485736e5e5661e, type: 2}
+    - {fileID: 11400000, guid: caaf61493ef163d4690529f473e39b92, type: 2}
   left:
     compatibleNodes:
     - {fileID: 11400000, guid: fc1cf5abe9332e84e8b096fb12facb07, type: 2}
+    - {fileID: 11400000, guid: ae932d5db24e44f4883d4b7b701ac29b, type: 2}
   right:
-    compatibleNodes: []
+    compatibleNodes:
+    - {fileID: 11400000, guid: 034ca5150fe11794ab056a49ee8255c4, type: 2}
+    - {fileID: 11400000, guid: 41cde22a1fda0e24498a8502c94197e3, type: 2}
+    - {fileID: 11400000, guid: ae932d5db24e44f4883d4b7b701ac29b, type: 2}

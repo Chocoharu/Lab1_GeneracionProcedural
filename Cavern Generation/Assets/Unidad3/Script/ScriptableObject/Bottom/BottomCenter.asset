@@ -18,8 +18,12 @@ MonoBehaviour:
     compatibleNodes:
     - {fileID: 11400000, guid: 71b0771a8bfb44043825ac96fbfbde5b, type: 2}
     - {fileID: 11400000, guid: 93fdb8a5c2cd76d48a6e229eb59347c6, type: 2}
+    - {fileID: 11400000, guid: fc1cf5abe9332e84e8b096fb12facb07, type: 2}
   bottom:
-    compatibleNodes: []
+    compatibleNodes:
+    - {fileID: 11400000, guid: fc1cf5abe9332e84e8b096fb12facb07, type: 2}
+    - {fileID: 11400000, guid: 3f9720edc43bc9e44b7a46cb44d4db01, type: 2}
+    - {fileID: 11400000, guid: ae932d5db24e44f4883d4b7b701ac29b, type: 2}
   left:
     compatibleNodes:
     - {fileID: 11400000, guid: 034ca5150fe11794ab056a49ee8255c4, type: 2}

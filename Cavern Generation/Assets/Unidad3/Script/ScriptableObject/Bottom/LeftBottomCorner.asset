@@ -15,12 +15,18 @@ MonoBehaviour:
   nodeName: LeftBottomCorner
   prefab: {fileID: 3645971100349330320, guid: fb305c7038a3a2249a1f48160f0a2910, type: 3}
   top:
-    compatibleNodes: []
-  bottom:
     compatibleNodes:
     - {fileID: 11400000, guid: 41cde22a1fda0e24498a8502c94197e3, type: 2}
+  bottom:
+    compatibleNodes:
+    - {fileID: 11400000, guid: 3f9720edc43bc9e44b7a46cb44d4db01, type: 2}
+    - {fileID: 11400000, guid: 46375bb4efedd5043b485736e5e5661e, type: 2}
+    - {fileID: 11400000, guid: ae932d5db24e44f4883d4b7b701ac29b, type: 2}
   left:
-    compatibleNodes: []
+    compatibleNodes:
+    - {fileID: 11400000, guid: caaf61493ef163d4690529f473e39b92, type: 2}
+    - {fileID: 11400000, guid: 46375bb4efedd5043b485736e5e5661e, type: 2}
+    - {fileID: 11400000, guid: 3f9720edc43bc9e44b7a46cb44d4db01, type: 2}
   right:
     compatibleNodes:
     - {fileID: 11400000, guid: 67e7f5fc42a4f9c438a9913042ec2bb4, type: 2}

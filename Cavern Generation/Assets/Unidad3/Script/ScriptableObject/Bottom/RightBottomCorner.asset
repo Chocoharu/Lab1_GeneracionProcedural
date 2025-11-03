@@ -15,12 +15,18 @@ MonoBehaviour:
   nodeName: RightBottomCenter
   prefab: {fileID: 2263309447511509504, guid: d7babaf4e4364cd4a89b9fb5fb64680b, type: 3}
   top:
-    compatibleNodes: []
-  bottom:
     compatibleNodes:
     - {fileID: 11400000, guid: 46375bb4efedd5043b485736e5e5661e, type: 2}
+  bottom:
+    compatibleNodes:
+    - {fileID: 11400000, guid: fc1cf5abe9332e84e8b096fb12facb07, type: 2}
+    - {fileID: 11400000, guid: ae932d5db24e44f4883d4b7b701ac29b, type: 2}
+    - {fileID: 11400000, guid: 3f9720edc43bc9e44b7a46cb44d4db01, type: 2}
   left:
     compatibleNodes:
     - {fileID: 11400000, guid: 67e7f5fc42a4f9c438a9913042ec2bb4, type: 2}
   right:
-    compatibleNodes: []
+    compatibleNodes:
+    - {fileID: 11400000, guid: 034ca5150fe11794ab056a49ee8255c4, type: 2}
+    - {fileID: 11400000, guid: 41cde22a1fda0e24498a8502c94197e3, type: 2}
+    - {fileID: 11400000, guid: ae932d5db24e44f4883d4b7b701ac29b, type: 2}

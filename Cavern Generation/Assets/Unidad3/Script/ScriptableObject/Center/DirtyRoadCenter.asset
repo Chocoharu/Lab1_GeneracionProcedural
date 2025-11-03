@@ -17,12 +17,16 @@ MonoBehaviour:
   top:
     compatibleNodes:
     - {fileID: 11400000, guid: fc1cf5abe9332e84e8b096fb12facb07, type: 2}
+    - {fileID: 11400000, guid: 71b0771a8bfb44043825ac96fbfbde5b, type: 2}
   bottom:
     compatibleNodes:
     - {fileID: 11400000, guid: 67e7f5fc42a4f9c438a9913042ec2bb4, type: 2}
+    - {fileID: 11400000, guid: 71b0771a8bfb44043825ac96fbfbde5b, type: 2}
   left:
     compatibleNodes:
     - {fileID: 11400000, guid: 41cde22a1fda0e24498a8502c94197e3, type: 2}
+    - {fileID: 11400000, guid: 71b0771a8bfb44043825ac96fbfbde5b, type: 2}
   right:
     compatibleNodes:
     - {fileID: 11400000, guid: 46375bb4efedd5043b485736e5e5661e, type: 2}
+    - {fileID: 11400000, guid: 71b0771a8bfb44043825ac96fbfbde5b, type: 2}

@@ -17,9 +17,9 @@ public class WFCBuilder : MonoBehaviour
     public Vector2Int[] offsets = new Vector2Int[]
     {
         new Vector2Int(0,1), // Up
-        new Vector2Int(1,0), // Right
         new Vector2Int(0,-1), // Down
-        new Vector2Int(-1,0) // Left
+        new Vector2Int(-1,0), // Left
+        new Vector2Int(1, 0) // Right
     };
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -62,10 +62,10 @@ public class WFCBuilder : MonoBehaviour
                                 WhittleNodes(potentialNodes, neighbourNode.top.compatibleNodes);
                                 break;
                             case 2:
-                                WhittleNodes(potentialNodes, neighbourNode.left.compatibleNodes);
+                                WhittleNodes(potentialNodes, neighbourNode.right.compatibleNodes);
                                 break;
                             case 3:
-                                WhittleNodes(potentialNodes, neighbourNode.right.compatibleNodes);
+                                WhittleNodes(potentialNodes, neighbourNode.left.compatibleNodes);
                                 break;
                         }
                     }

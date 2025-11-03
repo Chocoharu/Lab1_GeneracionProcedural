@@ -24,5 +24,9 @@ MonoBehaviour:
     compatibleNodes:
     - {fileID: 11400000, guid: 71b0771a8bfb44043825ac96fbfbde5b, type: 2}
     - {fileID: 11400000, guid: 93fdb8a5c2cd76d48a6e229eb59347c6, type: 2}
+    - {fileID: 11400000, guid: 41cde22a1fda0e24498a8502c94197e3, type: 2}
   right:
-    compatibleNodes: []
+    compatibleNodes:
+    - {fileID: 11400000, guid: 034ca5150fe11794ab056a49ee8255c4, type: 2}
+    - {fileID: 11400000, guid: 41cde22a1fda0e24498a8502c94197e3, type: 2}
+    - {fileID: 11400000, guid: ae932d5db24e44f4883d4b7b701ac29b, type: 2}
