@@ -149,14 +149,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 327cb67a8fd350e4491354097641fbc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputExample: 'GGGSSWWWSG
+  inputExample: '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    WWWSSGSSGG
+    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    SSSGGWGWSS'
+    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    ----------------------------------------------------------------------------------E-----------------------------------------------------------------------------------------------------------------------
+
+    ----------------------Q---------------------------------------------------------SSSSSSSS---SSSQ--------------?-----------SSS----SQQS--------------------------------------------------------XX------------
+
+    -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------XXX------------
+
+    -------------------------------------------------------------------------------E----------------------------------------------------------------------------------------------------------XXXX------------
+
+    ----------------------------------------------------------------S------------------------------------------------------------------------------------------------------------------------XXXXX------------
+
+    ----------------Q---S?SQS---------------------<>---------<>------------------S?S--------------S-----SS----Q--Q--Q-----S----------SS------X--X----------XX--X------------SSQS------------XXXXXX------------
+
+    --------------------------------------<>------[]---------[]-----------------------------------------------------------------------------XX--XX--------XXX--XX--------------------------XXXXXXX------------
+
+    ----------------------------<>--------[]------[]---------[]----------------------------------------------------------------------------XXX--XXX------XXXX--XXX-----<>--------------<>-XXXXXXXX------------
+
+    ---------------------E------[]--------[]-E----[]-----E-E-[]------------------------------------E-E--------E-----------------EE-E-E----XXXX--XXXX----XXXXX--XXXX----[]---------EE---[]XXXXXXXXX--------X---
+
+    XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--XXXXXXXXXXXXXXX---XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+  outputColumns: 100
   N: 2
-  outputLenght: 200
-  width: 20
   renderer: {fileID: 1387006833}
 --- !u!4 &1387006832
 Transform:
@@ -185,9 +206,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cc46649092b6b94c9bf6ddce3d3378a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grassPrefab: {fileID: 3134344680061875083, guid: dac5bd306bf54aa4b83cb288153c9a4a, type: 3}
-  sandPrefab: {fileID: 23542650997152650, guid: 43e651feb4fcecd40992295d32b28161, type: 3}
-  waterPrefab: {fileID: 3200909793585611837, guid: 2f928467ab2007947aeca0f5b1f672c1, type: 3}
+  groundPrefab: {fileID: 1355773418515867934, guid: 69a8847a40ecda34a8bce3f2e45fac80, type: 3}
+  blockPrefab: {fileID: 1355773418515867934, guid: f981236f2e4fd6e479fc507cbae0c47c, type: 3}
+  emptyPrefab: {fileID: 1355773418515867934, guid: d835398e34bb92b469b97d9fd499ea06, type: 3}
+  CoinBlockPrefab: {fileID: 1355773418515867934, guid: f981236f2e4fd6e479fc507cbae0c47c, type: 3}
+  QuestionBlockPrefab: {fileID: 1355773418515867934, guid: 4ca38357bae4aa641adf83b040b148b8, type: 3}
+  enemyPrefab: {fileID: 1355773418515867934, guid: 77f44fe3b22dcb9438b70a22029b0832, type: 3}
+  leftTubPrefab: {fileID: 1355773418515867934, guid: ec320323da32e4b408aff481e280389c, type: 3}
+  rightTubPrefab: {fileID: 1355773418515867934, guid: 30a35eb4acf669f42b2c622073548bb3, type: 3}
+  leftTopTubPrefab: {fileID: 1355773418515867934, guid: 5acdef8ed6827c84aad598614bcf7dbc, type: 3}
+  rightTopTubPrefab: {fileID: 1355773418515867934, guid: 5bbb5e1cfdbfb4f4fa45ce68d1219d74, type: 3}
 --- !u!1 &1858440572
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,6 +227,7 @@ GameObject:
   - component: {fileID: 1858440575}
   - component: {fileID: 1858440574}
   - component: {fileID: 1858440573}
+  - component: {fileID: 1858440576}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -280,6 +309,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1858440576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858440572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

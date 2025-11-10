@@ -1,28 +1,38 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelRenderer : MonoBehaviour
 {
-    public GameObject grassPrefab;
-    public GameObject sandPrefab;
-    public GameObject waterPrefab;
+    public GameObject groundPrefab;
+    public GameObject blockPrefab;
+    public GameObject emptyPrefab;
+    public GameObject CoinBlockPrefab;
+    public GameObject QuestionBlockPrefab;
+    public GameObject enemyPrefab;
+    public GameObject leftTubPrefab;
+    public GameObject rightTubPrefab;
+    public GameObject leftTopTubPrefab;
+    public GameObject rightTopTubPrefab;
 
-    public void Render(string data, int width)
+    public void Render(List<string> columns)
     {
 
         foreach (Transform child in transform)
-            GameObject.Destroy(child.gameObject);
+            Destroy(child.gameObject);
 
-        for(int i = 0; i < data.Length; i++)
+        int width = columns.Count;
+        int height = columns[0].Length;
+
+        for (int x = 0; x < width; x++)
         {
+            for (int y = 0; y < height; y++)
+            {
+                char symbol = columns[x][y];
+                GameObject prefab = GetPrefab(symbol);
 
-            int x = i % width;
-            int y = i / width;
-
-            char symbol = data[i];
-            GameObject prefab = GetPrefab(symbol);
-
-            if (prefab != null)
-                Instantiate(prefab, new Vector3(x, -y, 0), Quaternion.identity, transform);
+                if (prefab != null)
+                    Instantiate(prefab, new Vector3(x, height - y, 0), Quaternion.identity, transform);
+            }
         }
     }
 
@@ -31,9 +41,17 @@ public class LevelRenderer : MonoBehaviour
 
         switch (c)
         {
-            case 'G': return grassPrefab;
-            case 'S': return sandPrefab;
-            case 'W': return waterPrefab;
+
+            case 'X': return groundPrefab;
+            case 'S': return blockPrefab;
+            case '-': return emptyPrefab;
+            case '?': return QuestionBlockPrefab;
+            case 'Q': return CoinBlockPrefab;
+            case 'E': return enemyPrefab;
+            case '<': return leftTopTubPrefab;
+            case '>': return rightTopTubPrefab;
+            case '[': return leftTubPrefab;
+            case ']': return rightTubPrefab;
             default: return null;
         }
     }
