@@ -6,22 +6,22 @@ public class WFCGenerator : MonoBehaviour
 {
     // Tamaño de los patrones extraídos (N x N)
     [Header("Aprendizaje de patrones")]
-    [SerializeField] int n = 3;
+    [SerializeField] int n;
     // Si al extraer patrones desde la entrada se considera envoltura (torus)
-    [SerializeField] bool periodicInput = true;
+    [SerializeField] bool periodicInput;
     // Semilla para el generador aleatorio (-1 significa usar una semilla aleatoria)
-    [SerializeField] int rngSeed = 12345;
+    [SerializeField] int rngSeed;
 
     // Dimensiones de la salida en celdas de patrón
     [Header("Tamaño de salida (en celdas de patrón)")]
-    [SerializeField] int outWidth = 20;
-    [SerializeField] int outHeight = 20;
+    [SerializeField] int outWidth;
+    [SerializeField] int outHeight;
 
     // Mapeo opcional de ID de celda a Prefab de Unity para instanciado
     [Header("Mapeo opcional ID->Prefab (para instanciar)")]
     [SerializeField] List<TilePrefab> tilePrefabs = new();
     // Tamaño de cada celda en unidades de escena
-    [SerializeField] float cellSize = 1f;
+    [SerializeField] float cellSize;
 
     // Fuente de ejemplo: CSV de enteros (opcional)
     [Header("Fuente simple de ejemplo (matriz de enteros)")]
