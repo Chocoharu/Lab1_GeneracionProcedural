@@ -149,16 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 327cb67a8fd350e4491354097641fbc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< Updated upstream
-  inputExample: 'GGGSSWWWSG
-
-    WWWSSGSSGG
-
-    SSSGGWGWSS'
-=======
   inputFolder: InputMaps
   outputColumns: 100
->>>>>>> Stashed changes
   N: 2
   outputLenght: 200
   width: 20
@@ -190,16 +182,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cc46649092b6b94c9bf6ddce3d3378a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< Updated upstream
-  grassPrefab: {fileID: 3134344680061875083, guid: dac5bd306bf54aa4b83cb288153c9a4a, type: 3}
-  sandPrefab: {fileID: 23542650997152650, guid: 43e651feb4fcecd40992295d32b28161, type: 3}
-  waterPrefab: {fileID: 3200909793585611837, guid: 2f928467ab2007947aeca0f5b1f672c1, type: 3}
-=======
   groundPrefab: {fileID: 23542650997152650, guid: 43e651feb4fcecd40992295d32b28161, type: 3}
   waterPrefab: {fileID: 3200909793585611837, guid: 2f928467ab2007947aeca0f5b1f672c1, type: 3}
   enemyPrefab: {fileID: 1355773418515867934, guid: 77f44fe3b22dcb9438b70a22029b0832, type: 3}
   grassPrefab: {fileID: 3134344680061875083, guid: dac5bd306bf54aa4b83cb288153c9a4a, type: 3}
->>>>>>> Stashed changes
 --- !u!1 &1858440572
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,62 +5,77 @@ public class MarkovModel : MonoBehaviour
 {
 
     int N;
-    private Dictionary<string, List<char>> transitions;
+    private Dictionary<string, List<string>> transitions;
 
     public MarkovModel(int n)
     {
-
-        N = n;
-        transitions = new Dictionary<string, List<char>>();
+        N = Mathf.Max(2, n);
+        transitions = new Dictionary<string, List<string>>();
     }
-    
 
-    public void Train(string example)
+    public void Train(List<string> columns)
     {
-        example = example.Replace("\n", "").Replace("\r", "");
         transitions.Clear();
 
-        for(int i = 0; i <= example.Length - N; i++)
-        {
+        int contextSize = N - 1;
 
-            string key = example.Substring(i, N - 1);
-            char next = example[i + (N - 1)];
+        if (columns.Count <= contextSize)
+        {
+            Debug.LogError("No hay suficientes columnas para entrenar con N=" + N);
+            return;
+        }
+
+        for (int i = 0; i < columns.Count - contextSize; i++)
+        {
+            string key = BuildKey(columns, i, contextSize);
+            string next = columns[i + contextSize];
 
             if (!transitions.ContainsKey(key))
-                transitions[key] = new List<char>();
+                transitions[key] = new List<string>();
 
             transitions[key].Add(next);
-        }   
+        }
     }
 
-    public string Generate(int length)
+    public List<string> Generate(int count, List<string> initialColumns)
     {
+        List<string> result = new List<string>();
 
-        if (transitions.Count == 0)
-            return " ";
+        int contextSize = N - 1;
 
-        string current = GetRandomKey();
-        string result = current;
+        for (int i = 0; i < contextSize; i++)
+            result.Add(initialColumns[i]);
 
-        for(int i = 0; i < length; i++)
+        for (int i = contextSize; i < count; i++)
         {
+            string key = BuildKey(result, i - contextSize, contextSize);
 
-            if (!transitions.ContainsKey(current))
-                current = GetRandomKey();
+            if (!transitions.ContainsKey(key))
+                key = GetRandomKey();
 
-            List<char> possibleNext = transitions[current];
-            char next = possibleNext[Random.Range(0, possibleNext.Count)];
-            result += next;
-
-            current = result.Substring(result.Length - (N - 1), N - 1);
+            List<string> options = transitions[key];
+            string next = options[Random.Range(0, options.Count)];
+            result.Add(next);
         }
 
         return result;
     }
 
+    private string BuildKey(List<string> columns, int start, int count)
+    {
+        string key = "";
+
+        for (int i = 0; i < count; i++)
+        {
+            if (i > 0) key += "|";
+            key += columns[start + i];
+        }
+
+        return key;
+    }
+
     private string GetRandomKey()
     {
-
         List<string> keys = new List<string>(transitions.Keys);
         return keys[Random.Range(0, keys.Count)];
     }

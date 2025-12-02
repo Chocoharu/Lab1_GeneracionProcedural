@@ -1,53 +1,49 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelRenderer : MonoBehaviour
 {
-<<<<<<< Updated upstream
-    public GameObject grassPrefab;
-    public GameObject sandPrefab;
     public GameObject waterPrefab;
-
-    public void Render(string data, int width)
-=======
     public GameObject groundPrefab;
-    public GameObject waterPrefab;
     public GameObject enemyPrefab;
     public GameObject grassPrefab;
-    public void Render(List<string> columns)
->>>>>>> Stashed changes
-    {
 
+    public float cellSize = 1f;
+
+    public void Render(List<string> columns)
+    {
+        // Limpiar
         foreach (Transform child in transform)
             GameObject.Destroy(child.gameObject);
 
-        for(int i = 0; i < data.Length; i++)
+        int width = columns.Count;
+        int height = columns[0].Length;
+
+        // Dibujar columnas
+        for (int x = 0; x < width; x++)
         {
+            for (int y = 0; y < height; y++)
+            {
+                char c = columns[x][y];
+                GameObject prefab = GetPrefab(c);
 
-            int x = i % width;
-            int y = i / width;
-
-            char symbol = data[i];
-            GameObject prefab = GetPrefab(symbol);
-
-            if (prefab != null)
-                Instantiate(prefab, new Vector3(x, -y, 0), Quaternion.identity, transform);
+                if (prefab != null)
+                {
+                    Vector3 pos = new Vector3(x * cellSize, -y * cellSize, 0);
+                    Instantiate(prefab, pos, Quaternion.identity, transform);
+                }
+            }
         }
     }
 
-    private GameObject GetPrefab(int id)
+    private GameObject GetPrefab(char c)
     {
-        switch (id)
+        switch (c)
         {
-<<<<<<< Updated upstream
-            case 'G': return grassPrefab;
-            case 'S': return sandPrefab;
-            case 'W': return waterPrefab;
-=======
-            case 0: return waterPrefab;
-            case 1: return groundPrefab;
-            case 2: return enemyPrefab;
-            case 3: return grassPrefab;
->>>>>>> Stashed changes
+            case '0': return waterPrefab;
+            case '1': return groundPrefab;
+            case '2': return enemyPrefab;
+            case '3': return grassPrefab;
             default: return null;
         }
     }

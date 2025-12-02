@@ -1,13 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
 
     [SerializeField] string inputFolder = "InputMaps";
-
     public int N = 2;
-    public int outputLenght = 20;
-    public int width = 20;
+    public int outputColumns = 20;
 
     public LevelRenderer renderer;
 
@@ -20,17 +19,6 @@ public class LevelGenerator : MonoBehaviour
 
     public void GenerateLevelMarkov()
     {
-
-<<<<<<< Updated upstream
-        model = new MarkovModel(N);
-        model.Train(inputExample);
-
-        string generated = model.Generate(outputLenght);
-        Debug.Log("Resultado Esperado: " + generated);
-
-        renderer.Render(generated, width);
-    }
-=======
         List<int[,]> maps = LoadMaps.LoadAllMaps(inputFolder);
 
         if (maps.Count == 0)
@@ -48,7 +36,7 @@ public class LevelGenerator : MonoBehaviour
         model = new MarkovModel(N);
         model.Train(allColumns);
 
-        // Generar columnas nuevas
+        // Generar columnas nuevas (usar primeras columnas como seed)
         List<string> generated = model.Generate(outputColumns, allColumns);
 
         renderer.Render(generated);
@@ -58,22 +46,6 @@ public class LevelGenerator : MonoBehaviour
         MapExporter.SaveMarkovLabeled(generated, "Generated/Markov", filename);
 
         Debug.Log("Mapa Markov exportado como: " + filename);
-    }
-
-    List<string> ProcessInput(string raw)
-    {
-
-        string[] split = raw.Split('\n');
-        List<string> lines = new List<string>();
-
-        foreach (string line in split)
-        {
-
-            string clean = line.TrimEnd('\r');
-            lines.Add(clean);
-        }
-
-        return lines;
     }
 
     List<string> MapToColumns(int[,] map)
@@ -94,29 +66,4 @@ public class LevelGenerator : MonoBehaviour
 
         return columns;
     }
-
-    List<string> ConvertToColumns(List<string> lines)
-    {
-
-        int height = lines.Count;
-        int widht = lines[0].Length;
-
-        List<string> columns = new List<string>();
-
-        for(int x = 0; x < widht; x++)
-        {
-            string col = "";
-            for(int y = 0; y < height; y++)
-            {
-
-                col += lines[y][x];
-            }
-
-            columns.Add(col);
-        }
-
-        return columns;
-    }
-
->>>>>>> Stashed changes
 }
