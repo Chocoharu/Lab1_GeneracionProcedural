@@ -25,38 +25,43 @@ public class WFCGenerator : MonoBehaviour
 
     // Fuente de ejemplo: CSV de enteros (opcional)
     [Header("Fuente simple de ejemplo (matriz de enteros)")]
-    [SerializeField] TextAsset inputCSV;
+    [SerializeField] string inputFolder = "InputMaps";
+    private List<int[,]> trainingMaps;
 
     // Diccionario interno que asocia un ID de celda a un prefab
     private Dictionary<int, GameObject> _idToPrefab;
 
     void Start()
     {
-        // 1) Cargar la matriz de entrada desde CSV
-        int[,] input = LoadInputFromCSV(inputCSV);
-        if (input == null)
+        // Cargar múltiples mapas
+        trainingMaps = LoadMaps.LoadAllMaps(inputFolder);
+
+        if (trainingMaps.Count == 0)
         {
-            Debug.LogError("No se pudo cargar la matriz de entrada.");
+            Debug.LogError("No se encontraron mapas en la carpeta: " + inputFolder);
             return;
         }
 
-        // 2) Construir el catálogo de patrones (patrones, pesos y reglas de compatibilidad)
+        // Construir catálogo con múltiples inputs
         var catalog = new PatternCatalog(n, periodicInput);
-        catalog.BuildFromInput(input);
 
-        // 3) Ejecutar el modelo Wave Function Collapse sobre una rejilla de patrones outWidth x outHeight
+        foreach (var m in trainingMaps)
+            catalog.BuildFromInput(m);
+
         int? seed = rngSeed >= 0 ? rngSeed : (int?)null;
         var model = new WaveModel(catalog, outWidth, outHeight, seed);
+
         if (!model.Run(out int[,] patternGrid))
         {
-            Debug.LogError("WFC falló (contradicción). Prueba otra semilla o ajusta parámetros.");
+            Debug.LogError("WFC falló (contradicción)");
             return;
         }
 
-        // 4) Reconstruir la matriz de IDs por celda a partir de la rejilla de patrones
         int[,] result = catalog.ReconstructFromPatternGrid(outWidth, outHeight, patternGrid);
 
-        // 5) Preparar el mapeo ID->Prefab e instanciar la salida en la escena (si hay prefabs)
+        // Exportar CON etiqueta
+        MapExporter.SaveLabeled(result, "Generated/WFC", "map_wfc_" + UnityEngine.Random.Range(0, 9999) + ".csv");
+
         BuildPrefabMap();
         InstantiateResult(result);
     }

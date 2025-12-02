@@ -213,9 +213,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   n: 5
   periodicInput: 1
+<<<<<<< Updated upstream
   rngSeed: 12345
   outWidth: 20
   outHeight: 20
+=======
+  rngSeed: -1
+  outWidth: 8
+  outHeight: 8
+>>>>>>> Stashed changes
   tilePrefabs:
   - id: 0
     prefab: {fileID: 23542650997152650, guid: 43e651feb4fcecd40992295d32b28161, type: 3}
@@ -223,8 +229,10 @@ MonoBehaviour:
     prefab: {fileID: 3134344680061875083, guid: dac5bd306bf54aa4b83cb288153c9a4a, type: 3}
   - id: 2
     prefab: {fileID: 3200909793585611837, guid: 2f928467ab2007947aeca0f5b1f672c1, type: 3}
+  - id: 3
+    prefab: {fileID: 2865597880818603797, guid: 6e4bd4e01772cc3418b159d16a1ff875, type: 3}
   cellSize: 1
-  inputCSV: {fileID: 4900000, guid: fc57e33129db1334a8f8d7a59b09ff92, type: 3}
+  inputFolder: InputMaps
 --- !u!4 &1330322226
 Transform:
   m_ObjectHideFlags: 0
