@@ -22,7 +22,7 @@ public class LevelGenerator : MonoBehaviour
     // Paso principal: orquesta la generación de niveles usando un modelo de Markov
     public void GenerateLevelMarkov()
     {
-        // Paso 1: convertir cada CSV de entrada en una matriz int[,]
+        // Paso 1: cargar mapas de entrada
         List<int[,]> maps = new List<int[,]>();
 
         foreach (var csv in inputCsvMaps)
@@ -31,34 +31,37 @@ public class LevelGenerator : MonoBehaviour
             maps.Add(ParseCsvToMap(csv));
         }
 
-        // Paso 2: validar que tengamos al menos un mapa
         if (maps.Count == 0)
         {
             Debug.LogError("No se encontraron mapas en la lista inputCsvMaps");
             return;
         }
 
-        // Paso 3: convertir todos los mapas en columnas para entrenar el modelo
+        // Paso 2: convertir mapas a columnas
         List<string> allColumns = new List<string>();
 
         foreach (var map in maps)
             allColumns.AddRange(MapToColumns(map));
 
-        // Paso 4: crear y entrenar el modelo de Markov con orden N
+        // Paso 3: entrenar modelo Markov
         model = new MarkovModel(N);
         model.Train(allColumns);
 
-        // Paso 5: generar nuevas columnas usando las columnas existentes como semilla
-        List<string> generated = model.Generate(outputColumns, allColumns);
+        //  GENERAR 10 MAPAS
+        for (int i = 0; i < 10; i++)
+        {
+            List<string> generated = model.Generate(outputColumns, allColumns);
 
-        // Paso 6: renderizar las columnas generadas en la escena
-        renderer.Render(generated);
+            // Exportar
+            string filename = $"map_markov_{i}.csv";
+            MapExporter.SaveMarkovLabeled(generated, "Generated/Markov", filename);
 
-        // Paso 7: exportar las columnas generadas a CSV con un nombre aleatorio
-        string filename = "map_markov_" + Random.Range(0, 9999) + ".csv";
-        MapExporter.SaveMarkovLabeled(generated, "Generated/Markov", filename);
+            Debug.Log($"Markov: mapa {i} exportado como {filename}");
 
-        Debug.Log("Mapa Markov exportado como: " + filename);
+            // Render en Unity SOLO el último
+            if (i == 9)
+                renderer.Render(generated);
+        }
     }
 
     // Convierte una matriz 2D de enteros en una lista de cadenas donde cada cadena es una columna

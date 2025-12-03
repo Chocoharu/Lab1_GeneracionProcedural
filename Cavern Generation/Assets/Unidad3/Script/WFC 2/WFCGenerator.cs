@@ -28,17 +28,26 @@ public class WFCGenerator : MonoBehaviour
     [SerializeField] string inputFolder = "InputMaps";
     private List<int[,]> trainingMaps;
 
+    [Header("Mapas CSV de entrenamiento (TextAssets)")]
+    [SerializeField] private List<TextAsset> inputCsvMaps;
+
     // Diccionario interno que asocia un ID de celda a un prefab
     private Dictionary<int, GameObject> _idToPrefab;
 
     void Start()
     {
         // Cargar múltiples mapas
-        trainingMaps = LoadMaps.LoadAllMaps(inputFolder);
+        trainingMaps = new List<int[,]>();
+
+        foreach (var csv in inputCsvMaps)
+        {
+            if (csv == null) continue;
+            trainingMaps.Add(ParseCsvToMap(csv));
+        }
 
         if (trainingMaps.Count == 0)
         {
-            Debug.LogError("No se encontraron mapas en la carpeta: " + inputFolder);
+            Debug.LogError("No se encontraron mapas CSV asignados en el inspector.");
             return;
         }
 
@@ -49,21 +58,33 @@ public class WFCGenerator : MonoBehaviour
             catalog.BuildFromInput(m);
 
         int? seed = rngSeed >= 0 ? rngSeed : (int?)null;
-        var model = new WaveModel(catalog, outWidth, outHeight, seed);
 
-        if (!model.Run(out int[,] patternGrid))
+        //  GENERAR 10 MAPAS
+        for (int i = 0; i < 10; i++)
         {
-            Debug.LogError("WFC falló (contradicción)");
-            return;
+            var model = new WaveModel(catalog, outWidth, outHeight, seed);
+
+            if (!model.Run(out int[,] patternGrid))
+            {
+                Debug.LogError("WFC falló (contradicción)");
+                continue;
+            }
+
+            int[,] result = catalog.ReconstructFromPatternGrid(outWidth, outHeight, patternGrid);
+
+            // Exportar CON etiqueta (incluye índice del mapa)
+            string filename = $"map_wfc_{i}.csv";
+            MapExporter.SaveLabeled(result, "Generated/WFC", filename);
+
+            Debug.Log($"WFC: mapa {i} exportado como {filename}");
+
+            // Render en Unity solo del último (opcional)
+            if (i == 9)
+            {
+                BuildPrefabMap();
+                InstantiateResult(result);
+            }
         }
-
-        int[,] result = catalog.ReconstructFromPatternGrid(outWidth, outHeight, patternGrid);
-
-        // Exportar CON etiqueta
-        MapExporter.SaveLabeled(result, "Generated/WFC", "map_wfc_" + UnityEngine.Random.Range(0, 9999) + ".csv");
-
-        BuildPrefabMap();
-        InstantiateResult(result);
     }
 
     // ---------- Utilidades ----------
@@ -135,6 +156,32 @@ public class WFCGenerator : MonoBehaviour
             for (int x = 0; x < w; x++) grid[x, y] = rows[y][x];
         }
         return grid;
+    }
+
+    public static int[,] ParseCsvToMap(TextAsset csv)
+    {
+        string[] lines = csv.text.Trim().Split('\n');
+
+        int height = lines.Length;
+        int width = lines[0].Split(',').Length;
+
+        int[,] map = new int[width, height];
+
+        for (int y = 0; y < height; y++)
+        {
+            string[] values = lines[y].Trim().Split(',');
+
+            for (int x = 0; x < width; x++)
+            {
+                int val;
+                if (int.TryParse(values[x], out val))
+                    map[x, y] = val;
+                else
+                    map[x, y] = 0;
+            }
+        }
+
+        return map;
     }
 }
 
